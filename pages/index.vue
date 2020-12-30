@@ -1,66 +1,82 @@
 <template>
-  <v-app id="inspire">
-
-    <v-app-bar app color="black" flat>
-      <v-container class="py-0 fill-height">
-        <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
-
-        <v-btn v-for="link in links" :key="link" text>
-          {{ link }}
-        </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-responsive max-width="260">
-          <v-text-field
-            dense
-            flat
-            hide-details
-            rounded
-            solo-inverted
-          ></v-text-field>
-        </v-responsive>
-      </v-container>
-    </v-app-bar>
-
-    <v-main class="">
-      <v-container>
+ 
+      <v-container class="mt-10">
         <v-row>
-          <v-col cols="2">
-            <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item v-for="n in 5" :key="n" link>
-                  <v-list-item-content>
-                    <v-list-item-title> List Item {{ n }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-divider class="my-2"></v-divider>
-
-                <v-list-item link color="grey lighten-4">
-                  <v-list-item-content>
-                    <v-list-item-title> Refresh </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-sheet>
-          </v-col>
-
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg">
-              <!--  -->
+            <v-sheet min-height="40vh" rounded="lg" >
+              <v-card-text class="headline font-weight-bold text-md-center">
+                <br><br><br>
+                   {{RHadith}}
+              </v-card-text>
+              
+
+              <div class="text-md-center mt-10 flex">
+                <v-btn icon color="green"  x-large @click.prevent="RandomHadith()" >
+                    <v-icon>mdi-cached</v-icon>
+                </v-btn>
+              </div>
             </v-sheet>
           </v-col>
         </v-row>
       </v-container>
-    </v-main>
-  </v-app>
+   
 </template>
 
 <script>
 export default {
+  head: {
+    title: 'Hadiths Lite Landing Page',
+    meta: [
+      {
+        hid: 'Landing Page',
+        name: 'Landing Page',
+        content: 'Random Hadith from Al Damiri',
+      },
+    ],
+  },
   data: () => ({
-    links: ['Dashboard', 'Messages', 'Profile', 'Updates'],
+   
+    api: 'https://al-damiri-hadiths-api.herokuapp.com/hadith',
+    Hadiths:[],
+    Hsize:'',
+    RHadith:[],
+    
   }),
+  methods:{
+    GetHadith(){
+        fetch(
+          `${this.api}`
+        )
+          .then(res => {
+            return res.json();
+          })
+          .then(this.setResults);
+    },
+     setResults(results) {
+     
+      this.Hadiths=results
+      this.Hsize=this.Hadiths.length
+      
+      this.RandomHadith()
+     
+    },
+    RandomHadith(){
+    let X = Math.floor((Math.random() * parseInt(this.Hsize)) + 1)
+    this.RHadith=this.Hadiths[X][2]
+    this.Hadiths.splice(X,1)
+    this.Hsize=this.Hsize-1
+    // to check if things are deleted and the size is reduced
+    console.log(this.Hsize)
+    console.log(this.Hadiths.length)
+
+    }
+  },
+  mounted(){
+    if(this.Hadiths.length<=0){
+      this.GetHadith()
+      console.log('everything is a-okay')}
+
+  }
 }
 </script>
+
