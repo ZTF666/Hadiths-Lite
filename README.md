@@ -15,7 +15,7 @@ This was made using :
 
 The api used for this is available here :
 
-(HADITHS-API)[https://github.com/ZTF666/Al-damiri-ahadiths]
+[HADITHS-API](https://github.com/ZTF666/Al-damiri-ahadiths)
 
 Feel free to use it .
 
